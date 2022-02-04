@@ -1,64 +1,36 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/user'
+import { AtButton, AtPreFooter, AtSireFooter, AtSiteHeader } from 'atmosphere-ui'
 
-const user = useUserStore()
-const name = ref(user.savedName)
-
-const router = useRouter()
-const go = () => {
-  if (name.value)
-    router.push(`/hi/${encodeURIComponent(name.value)}`)
+const state = {
+  title: 'Neathabits',
+  links: [{
+    name: 'Home',
+    url: '/#home',
+  }, {
+    name: 'About',
+    url: '#about',
+  }],
+  actions: [
+    {
+      name: 'Login',
+      url: '/login',
+      class: 'bg-white text-primary hover:bg-gray-100 transition',
+    },
+    {
+      name: 'Start for free',
+      url: '/register',
+      class: 'bg-primary text-white hover:bg-primary-700 transition',
+    },
+  ],
 }
-
-const { t } = useI18n()
 </script>
 
 <template>
-  <div>
-    <p class="text-4xl">
-      <carbon-campsite class="inline-block" />
-    </p>
-    <p>
-      <a rel="noreferrer" href="https://github.com/antfu/vitesse" target="_blank">
-        Vitesse
-      </a>
-    </p>
-    <p>
-      <em class="text-sm opacity-75">{{ t('intro.desc') }}</em>
-    </p>
-
-    <div class="py-4" />
-
-    <input
-      id="input"
-      v-model="name"
-      :placeholder="t('intro.whats-your-name')"
-      :aria-label="t('intro.whats-your-name')"
-      type="text"
-      autocomplete="false"
-      p="x-4 y-2"
-      w="250px"
-      text="center"
-      bg="transparent"
-      border="~ rounded gray-200 dark:gray-700"
-      outline="none active:none"
-      @keydown.enter="go"
-    >
-    <label class="hidden" for="input">{{ t('intro.whats-your-name') }}</label>
-
-    <div>
-      <button
-        class="m-3 text-sm btn"
-        :disabled="!name"
-        @click="go"
-      >
-        {{ t('button.go') }}
-      </button>
-    </div>
+  <div class="w-full bg-slate-800 backdrop-blur-md">
+    <at-site-header
+      :title="state.title"
+      :links="state.links"
+      :actions="state.actions"
+    />
   </div>
 </template>
-
-<route lang="yaml">
-meta:
-  layout: home
-</route>
