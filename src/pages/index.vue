@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { AtSiteHeader } from 'atmosphere-ui'
+import config from '~/config'
 
 const state = {
-  title: 'Neathabits',
+  title: config.appName,
   links: [{
     name: 'Home',
     url: '/#home',

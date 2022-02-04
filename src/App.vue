@@ -4,7 +4,7 @@ import { useSupabase } from 'lumiere-utils/useSupabase'
 import config from './config'
 
 useHead({
-  title: 'Neathabits',
+  title: config.appName,
   meta: [
     { name: 'description', content: 'The habit tracker you need' },
   ],
