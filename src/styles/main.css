@@ -1,7 +1,5 @@
 @import './markdown.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './tailwind.css';
 
 html,
 body,
