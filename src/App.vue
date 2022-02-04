@@ -1,7 +1,8 @@
 <script setup lang="ts">
-// https://github.com/vueuse/head
-// you can use this to manipulate the document head in any components,
-// they will be rendered correctly in the html results with vite-ssg
+import { LumiereProvider } from 'lumiere-utils'
+import { useSupabase } from 'lumiere-utils/useSupabase'
+import config from './config'
+
 useHead({
   title: 'Neathabits',
   meta: [
@@ -11,5 +12,7 @@ useHead({
 </script>
 
 <template>
-  <router-view />
+  <LumiereProvider :provider="useSupabase" :config="config">
+    <router-view />
+  </LumiereProvider>
 </template>

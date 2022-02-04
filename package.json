@@ -12,6 +12,7 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^1.30.0",
     "@vueuse/core": "^7.5.4",
     "@vueuse/head": "^0.7.5",
     "lumiere-utils": "^0.3.9",
