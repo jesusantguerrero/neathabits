@@ -1,16 +1,17 @@
-const { teal, red, green } = require('tailwindcss/colors')
+const { red, green, blue } = require('tailwindcss/colors')
 
 module.exports = {
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
+    './node_modules/atmosphere-ui/**/*.vue',
   ],
   theme: {
     extend: {
       colors: {
         primary: {
-          DEFAULT: teal[500],
-          ...teal,
+          DEFAULT: blue[500],
+          ...blue,
         },
         error: {
           DEFAULT: red[400],
