@@ -5,7 +5,7 @@ import { setupLayouts } from 'virtual:generated-layouts'
 import App from './App.vue'
 
 // your custom styles here
-import './styles/main.css'
+import './styles/main.scss'
 
 const routes = setupLayouts(generatedRoutes)
 

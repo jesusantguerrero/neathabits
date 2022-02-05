@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   "stories": [
     "../src/**/*.stories.mdx",
@@ -6,14 +8,29 @@ module.exports = {
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    {
-      name :"@storybook/addon-postcss",
-      options: {
-        postcssLoaderOptions: {
-            implementation: require('postcss')
-        }
-      }
-    }, 
   ],
   "framework": "@storybook/vue3",
+   webpackFinal: async (config) => {
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: [
+        'vue-style-loader', 'css-loader', 'sass-loader',
+        {
+          loader: 'postcss-loader',
+          options: {
+            ident: 'postcss',
+            plugins: [
+              require('tailwindcss'),
+              require('autoprefixer'),
+            ],
+          },
+        },
+      ],
+      include: path.resolve(__dirname, '../src'),
+    })
+
+    console.log(config.module.rules)
+
+    return config;
+  },
 }
