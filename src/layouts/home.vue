@@ -1,5 +1,7 @@
 <template>
   <AppShell>
-    <router-view />
+    <Transition>
+      <router-view class="py-10" />
+    </Transition>
   </AppShell>
 </template>

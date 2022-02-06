@@ -6,9 +6,7 @@ const state = reactive({
 </script>
 
 <template>
-  <div class="py-20 text-center">
-    <DashboardTemplate :scheduled-events="state.scheduledEvents" />
-  </div>
+  <DashboardTemplate :scheduled-events="state.scheduledEvents" />
 </template>
 
 <route lang="yaml">

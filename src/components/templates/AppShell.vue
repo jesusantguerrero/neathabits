@@ -23,7 +23,7 @@ const signOut = () => {
       <aside class="app-shell__side">
         <AppSide :title="config.appName" />
       </aside>
-      <div class="app-shell__inner ic-scroller">
+      <div class="border-l app-shell__inner ic-scroller">
         <slot />
       </div>
     </div>
@@ -35,7 +35,6 @@ const signOut = () => {
     &__content {
         display: grid;
         grid-template-columns: 200px minmax(0, 1fr);
-        background: #f8f8f8 !important;
         position: relative;
         height: 100vh;
     }
