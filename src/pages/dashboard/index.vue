@@ -12,5 +12,5 @@ const state = reactive({
 <route lang="yaml">
 meta:
   layout: home
-  requiresAuth: false
+  requiresAuth: true
 </route>
