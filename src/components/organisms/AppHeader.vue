@@ -40,7 +40,7 @@ const onFeedback = (feedback) => {
 
 <template>
   <header class="bg-white">
-    <div class="flex justify-between px-10 py-3 border-b shadow-md">
+    <div class="flex justify-between px-10 py-3 border-b">
       <router-link to="/dashboard" class="flex items-center">
         <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
           <g fill="none" fill-rule="evenodd">
