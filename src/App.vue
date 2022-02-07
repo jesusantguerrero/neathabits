@@ -2,6 +2,7 @@
 import { LumiereProvider } from 'lumiere-utils'
 import { useSupabase } from 'lumiere-utils/useSupabase'
 import config from './config'
+import 'atmosphere-ui/dist/style.css'
 
 useHead({
   title: config.appName,

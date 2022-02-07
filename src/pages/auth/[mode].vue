@@ -21,7 +21,6 @@ import { nextTick, ref } from 'vue'
 import { AtAuthBox, AtAuthForm } from 'atmosphere-ui'
 import { useAuthState } from 'lumiere-utils/useAuth'
 import { useRouter } from 'vue-router'
-import 'atmosphere-ui/dist/style.css'
 import type { ApiError } from '@supabase/supabase-js'
 import config from '../../config'
 const { provider } = useAuthState()
