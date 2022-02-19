@@ -1,16 +1,65 @@
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { AtWeek } from 'atmosphere-ui'
+import EventForm from '~/components/organisms/EventForm.vue'
+import type { IScheduleEvent } from '~/utils/useApi'
+import { usePlanApi } from '~/utils/useApi'
 
 defineProps<{
-  scheduledEvents: []
   labels: []
 }>()
 
 const state = reactive({
   week: [],
   selectedDay: new Date(),
+  items: [],
 })
+
+// events setup
+const { add, getAll, update, remove } = usePlanApi()
+
+const fetchItems = async() => {
+  getAll().then((data) => {
+    state.items = data
+  })
+}
+
+const itemEvents = computed(() => {
+  return state.items.map((eventItem: IScheduleEvent) => ({
+    ...eventItem,
+    class: eventItem.labels && eventItem.labels.length > 0 ? eventItem.labels[0].colors : '',
+  }))
+})
+
+const isModalOpen = ref(false)
+const taskToCreate = reactive({})
+const onSaved = async(item) => {
+  if (item.id)
+    await update(item.id, item)
+
+  else
+    await add(item)
+
+  fetchItems()
+  isModalOpen.value = false
+}
+
+const onUpdate = async(item) => {
+  await update(item.id, item)
+  state.items.splice(state.items.map(item => item.id).indexOf(item.id), 1, item)
+  isModalOpen.value = false
+}
+
+const onDelete = async(item) => {
+  await remove(item.id)
+  state.items = state.items.filter(storedItem => storedItem.id !== item.id)
+  isModalOpen.value = false
+}
+
+onMounted(() => {
+  fetchItems()
+})
+
 </script>
 
 <template>
@@ -36,8 +85,14 @@ const state = reactive({
       <div class="w-10/12">
         <AtWeek
           :week="state.week"
-          :items="scheduledEvents"
-          class="overflow-auto ic-scroller scheduler ic-scroller"
+          :items="itemEvents"
+          @update="onUpdate"
+          class="overflow-auto ic-scroller scheduler"
+        />
+        <EventForm
+          :event-data="taskToCreate"
+          @delete="onDelete"
+          @saved="onSaved"
         />
       </div>
       <div class="w-2/12">
