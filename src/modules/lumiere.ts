@@ -11,7 +11,6 @@ export const install: UserModule = ({ router, isClient, app }) => {
   initAuth()
   router.beforeEach(async(to, _from, next) => {
     const user = await isAuthenticated()
-    debugger
     if (to.meta.requiresAuth !== false && !user)
       next({ path: '/auth/login' })
 

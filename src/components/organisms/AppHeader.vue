@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { AtFeedbackButton, AtUserButton } from 'atmosphere-ui'
+import { AtUserButton } from 'atmosphere-ui'
 import { useLumiere } from 'lumiere-utils/useLumiere'
 
 defineProps({
