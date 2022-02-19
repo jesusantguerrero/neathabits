@@ -55,6 +55,7 @@ const onLinkPressed = () => {
 </script>
 
 <route lang="yaml">
+name: auth
 meta:
   requiresAuth: false
 </route>

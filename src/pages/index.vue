@@ -43,3 +43,9 @@ const state = {
     </div>
   </div>
 </template>
+
+<route lang="yaml">
+meta:
+  name: auth
+  requiresAuth: false
+</route>

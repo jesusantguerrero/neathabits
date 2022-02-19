@@ -10,6 +10,7 @@ const state = reactive({
 </template>
 
 <route lang="yaml">
+name: dashboard
 meta:
   layout: home
   requiresAuth: true
