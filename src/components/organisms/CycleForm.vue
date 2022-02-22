@@ -1,0 +1,136 @@
+<script lang="ts" setup>
+import { NDatePicker } from 'naive-ui'
+import { AtButton, AtInput, useForm } from 'atmosphere-ui'
+
+const cycle = useForm({
+  id: 'new',
+  name: '(no title)',
+  description: '(no description)',
+  startDate: new Date(),
+  endDate: new Date(),
+  objectives: [],
+})
+
+const addObjective = () => {
+  cycle.objectives.push({
+    title: '',
+    description: '',
+    startDate: new Date(),
+    endDate: new Date(),
+    tasks: [],
+  })
+
+  const len = cycle.objectives.length
+
+  nextTick(() => {
+    const objective = document.querySelector(`.objectives:nth-child(${len})`)
+    objective?.querySelector('input')?.focus()
+  })
+}
+
+const removeObjective = (index: number) => {
+  cycle.objectives = cycle.objectives.filter((_item: any, i: number) => i !== index)
+}
+
+const onKeyModifier = (e: KeyboardEvent) => {
+  const { index } = e.target?.dataset
+  const modifiers = {
+    r: removeObjective.bind(null, index),
+  }
+
+  const method = modifiers[e.key]
+  if (method)
+    method()
+}
+const emit = defineEmits(['submit', 'cancel'])
+
+const onCancel = () => {
+  cycle.reset()
+  emit('cancel')
+}
+const submit = async() => {
+  emit('submit', cycle.data())
+  await cycle.reset()
+}
+</script>
+
+<template>
+  <div class="space-y-2 mb-5">
+    <FormField
+      v-model="cycle.name"
+      label="Cycle Name"
+      field="name"
+      :errors="cycle.errors"
+      :tag="'input'"
+    />
+    <FormField
+      v-model="cycle.description"
+      label="Description"
+      field="textarea"
+      :errors="cycle.errors"
+      :tag="'input'"
+    />
+    <div class="flex my-2 space-x-5">
+      <FormField
+        v-model="cycle.startTime"
+        label="Start Time"
+        field="date"
+        :errors="cycle.errors"
+        :tag="'input'"
+      >
+        <NDatePicker
+          v-model:value="cycle.startDate"
+          label="Start Time"
+          :errors="cycle.errors"
+          :tag="'input'"
+        />
+      </FormField>
+      <FormField
+        v-model="cycle.endDate"
+        label="Start Date"
+        field="date"
+        :errors="cycle.errors"
+        :tag="'input'"
+      >
+        <NDatePicker
+          v-model:value="cycle.endDate"
+          label="End Date"
+          :errors="cycle.errors"
+          :tag="'input'"
+        />
+      </FormField>
+    </div>
+    <div class="space-y-2">
+      <AtInput
+        v-for="(_objective, index) in cycle.objectives"
+        :key="index"
+        v-model="cycle.objectives[index].title"
+        label="Objectives"
+        :errors="cycle.errors"
+        :tag="'input'"
+        class="objectives"
+        is-borderless
+        :data-index="index"
+        @keydown.self.ctrl.prevent="onKeyModifier"
+        @keydown.self.ctrl.enter="addObjective"
+      >
+        <template #suffix>
+          <button @click="removeObjective(index)">
+            Remove
+          </button>
+        </template>
+      </AtInput>
+      <button class="font-bold text-gray-400" @click="addObjective">
+        Add Objective
+      </button>
+    </div>
+    <div class="flex space-x-2 justify-end items-center">
+      <AtButton class="bg-slate-400 text-white" @click="onCancel">
+        Cancel
+      </AtButton>
+      <AtButton class="bg-primary text-white" @click="submit">
+        Save
+      </AtButton>
+    </div>
+  </div>
+</template>
