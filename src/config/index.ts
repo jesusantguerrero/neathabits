@@ -1,7 +1,7 @@
 export default {
   appName: 'NeatHabits',
   home: 'dashboard',
-  loginRoutes: ['auth-login', 'auth-register'],
+  loginRoutes: ['auth'],
   FIREBASE_API_KEY: import.meta.env.VITE_FIREBASE_APP_KEY,
   FIREBASE_PROJECT_ID: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   FIREBASE_APP_ID: import.meta.env.VITE_FIREBASE_APP_ID,
