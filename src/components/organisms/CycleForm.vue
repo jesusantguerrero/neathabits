@@ -52,11 +52,19 @@ const submit = async() => {
   emit('submit', cycle.data())
   await cycle.reset()
 }
+
+const fieldName = ref()
+onMounted(() => {
+  nextTick(() => {
+    fieldName.value.focus()
+  })
+})
 </script>
 
 <template>
   <div class="space-y-2 mb-5">
     <FormField
+      ref="fieldName"
       v-model="cycle.name"
       label="Cycle Name"
       field="name"

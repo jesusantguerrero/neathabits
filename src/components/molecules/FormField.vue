@@ -34,6 +34,15 @@ const prettyError = computed(() => {
 })
 
 const inputRef = ref()
+
+const focus = () => {
+  inputRef.value.focus()
+}
+
+defineExpose({
+  focus,
+})
+
 watch(
   () => props.modelValue,
   (value) => {
