@@ -1,10 +1,17 @@
 <script lang="ts" setup>
-defineProps<{ type: string }>()
+interface ActivityType {
+  name: string
+  icon: string
+  label?: string
+}
+
+defineProps<{ activityType: ActivityType }>()
 
 </script>
 
 <template>
-  <div>
-    {{ type }}
+  <div v-if="activityType">
+    <i :class="activityType.icon" />
+    {{ activityType.label || activityType.name }}
   </div>
 </template>

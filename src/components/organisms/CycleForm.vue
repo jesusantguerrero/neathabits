@@ -2,6 +2,14 @@
 import { NDatePicker } from 'naive-ui'
 import { AtButton, AtInput, useForm } from 'atmosphere-ui'
 
+const emit = defineEmits(['submit', 'cancel'])
+const props = defineProps({
+  formData: {
+    type: Object,
+    default: () => ({}),
+  },
+})
+
 const cycle = useForm({
   id: 'new',
   name: '(no title)',
@@ -9,6 +17,8 @@ const cycle = useForm({
   startDate: new Date(),
   endDate: new Date(),
   objectives: [],
+}, {
+  emit,
 })
 
 const addObjective = () => {
@@ -17,7 +27,6 @@ const addObjective = () => {
     description: '',
     startDate: new Date(),
     endDate: new Date(),
-    tasks: [],
   })
 
   const len = cycle.objectives.length
@@ -42,16 +51,30 @@ const onKeyModifier = (e: KeyboardEvent) => {
   if (method)
     method()
 }
-const emit = defineEmits(['submit', 'cancel'])
 
 const onCancel = () => {
   cycle.reset()
   emit('cancel')
 }
 const submit = async() => {
-  emit('submit', cycle.data())
+  cycle.transform(data => ({
+    ...data,
+    startDate: new Date(data.startDate),
+    endDate: new Date(data.endDate),
+  })).submit('submit')
   await cycle.reset()
 }
+
+watch(() => props.formData, (data) => {
+  if (data) {
+    Object.keys(data).forEach((key) => {
+      cycle[key] = data[key]
+    })
+  }
+  else {
+    cycle.reset()
+  }
+}, { deep: true, immediate: true })
 
 const fieldName = ref()
 onMounted(() => {
@@ -62,7 +85,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="space-y-2 mb-5">
+  <div class="mb-5 space-y-2">
     <FormField
       ref="fieldName"
       v-model="cycle.name"
@@ -132,11 +155,11 @@ onMounted(() => {
         Add Objective
       </button>
     </div>
-    <div class="flex space-x-2 justify-end items-center">
-      <AtButton class="bg-slate-400 text-white" @click="onCancel">
+    <div class="flex items-center justify-end space-x-2">
+      <AtButton class="text-white bg-slate-400" @click="onCancel">
         Cancel
       </AtButton>
-      <AtButton class="bg-primary text-white" @click="submit">
+      <AtButton class="text-white bg-primary" @click="submit">
         Save
       </AtButton>
     </div>

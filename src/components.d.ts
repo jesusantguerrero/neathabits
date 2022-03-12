@@ -24,6 +24,7 @@ declare module 'vue' {
     FormField: typeof import('./components/molecules/FormField.vue')['default']
     HabitItem: typeof import('./components/organisms/HabitItem.vue')['default']
     HabitsTemplate: typeof import('./components/templates/HabitsTemplate.vue')['default']
+    IconCarbonTrash: typeof import('~icons/ic/on-carbon-trash')['default']
     README: typeof import('./components/README.md')['default']
   }
 }

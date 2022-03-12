@@ -1,27 +1,44 @@
+import camelcase from 'camelcase'
 import { parseISO } from 'date-fns'
+import decamelize from 'decamelize'
 /** @ts-expect-error: provide */
 import { AuthState, useAuthState } from 'lumiere-utils/useAuth'
 import { addRows, updateRow } from './useApiBase'
 
-export function useCycleApi() {
+export function useCycleApi(relationshipTable?: string, relationshipFields?: string[]) {
   const { provider, user } = useAuthState()
 
   const tableName = 'cycles'
-  const add = async(scheduledEvent) => {
-    const savedEvents = await addRows(tableName, [parseEvent(scheduledEvent)])
-
-    if (scheduledEvent.labels) {
-      await addRows('cycle_objectives', scheduledEvent.labels.map(label => ({
-        event_id: savedEvents[0].id,
-        label_id: label.id,
-        name: label.name,
-      })))
+  const updateRelationships = async(resource, savedResource) => {
+    if (relationshipTable && resource[relationshipTable]) {
+      const relation = resource[relationshipTable].map((record) => {
+        const fields: Record<string, any> = {}
+        if (relationshipFields) {
+          relationshipFields.forEach((field) => {
+            fields[decamelize(field)] = record[field]
+          })
+        }
+        else {
+          Object.keys(record).forEach((field) => {
+            fields[decamelize(field)] = record[field]
+          })
+          delete fields.id
+        }
+        return {
+          ...fields,
+          [`${tableName}_id`]: savedResource[0].id,
+        }
+      })
+      await addRows(`${tableName}_${relationshipTable}`, relation)
+      savedResource[relationshipTable] = resource[relationshipTable]
     }
 
-    savedEvents.labels = scheduledEvent.labels
-    return savedEvents
+    return savedResource
   }
-
+  const add = async(resource) => {
+    const savedResource = await addRows(tableName, [parseRecord(resource, relationshipTable)])
+    return updateRelationships(resource, savedResource)
+  }
   const get = async(siteId) => {
     const supabase = provider.supabase
     const { data, error } = await supabase.from('sites').select('*')
@@ -31,42 +48,32 @@ export function useCycleApi() {
     return data
   }
 
-  const update = async(id, scheduledEvent) => {
+  const update = async(resource) => {
     const supabase = AuthState.provider.supabase
-    await supabase.from('cycle_objectives').delete().eq('event_id', id)
-    const savedEvent = await updateRow(tableName, parseEvent(scheduledEvent), { returning: 'minimal' })
-    await addRows('cycle_objectives', scheduledEvent.labels.map(label => ({
-      event_id: savedEvent[0].id,
-      label_id: label.id,
-      name: label.name,
-      user_id: AuthState.user.id,
-    })))
-
-    savedEvent[0].labels = scheduledEvent.labels
-    return savedEvent[0]
+    await supabase.from(`${tableName}_${relationshipTable}`).delete().eq(`${tableName}_id`, resource.id)
+    const savedResource = await updateRow(tableName, parseRecord(resource, relationshipTable), { returning: 'representation' })
+    return updateRelationships(resource, savedResource)
   }
 
   const getAll = async() => {
     const supabase = provider.supabase
     const { data, error } = await supabase.from(tableName)
       .select(`*, 
-            cycle_objectives (
-                event_id,
-                labels (
-                    id,
-                    name,
-                    colors,
-                    color_type
-                )
+            ${tableName}_${relationshipTable} (             
+              *
             )
         `)
       .eq('user_id', user.id)
     if (error) throw error
-    return data?.map((evt: Record<string, any>) => eventToObject(evt, user))
+    const result = data?.map((evt: Record<string, any>) => recordToObject(evt, user, tableName, ['objectives']))
+    return result
   }
 
-  const remove = async(resourceId) => {
+  const remove = async(resourceId: string) => {
     const supabase = provider.supabase
+    if (relationshipTable)
+      await supabase.from(`${tableName}_${relationshipTable}`).delete().eq(`${tableName}_id`, resourceId)
+
     return await supabase.from(tableName).delete().eq('id', resourceId)
   }
 
@@ -97,36 +104,30 @@ export interface IScheduleEvent {
   id?: string
 }
 
-function parseEvent(scheduledEvent: IScheduleEvent) {
-  const newEvent: Record<string, any> = {
-    title: scheduledEvent.title,
-    description: scheduledEvent.description,
-    start_time: scheduledEvent.startTime,
-    end_time: scheduledEvent.endTime,
-    user_id: AuthState.user?.id,
-    recurrence: scheduledEvent.recurrence || '',
-    label_ids: scheduledEvent.labels && scheduledEvent.labels.map(label => label.id),
-  }
+function parseRecord(record: Record<string, any>, relationTable?: string) {
+  const tableRecord: Record<string, any> = Object.keys(record).reduce((acc, key) => {
+    acc[decamelize(key)] = record[key]
+    return acc
+  }, {})
 
-  if (scheduledEvent.id)
-    newEvent.id = scheduledEvent.id
+  if (record.id)
+    tableRecord.id = record.id
+  if (record.id === 'new')
+    delete tableRecord.id
 
-  return newEvent
+  if (relationTable)
+    delete tableRecord[relationTable]
+
+  return tableRecord
 }
 
-function eventToObject(scheduledEvent: Record<string, any>, user) {
-  return {
-    id: scheduledEvent.id,
-    title: scheduledEvent.title,
-    description: scheduledEvent.description,
-    startTime: parseISO(scheduledEvent.start_time),
-    endTime: parseISO(scheduledEvent.end_time),
-    user_id: user.id,
-    recurrence: scheduledEvent.recurrence || '',
-    labels: scheduledEvent.scheduled_events_labels.length
-      ? scheduledEvent.scheduled_events_labels.map((label: { labels: ILabel[] }) => ({
-        ...label.labels,
-      }))
-      : [],
-  }
+function recordToObject(record: Record<string, any>, user, tableName, relation: string[] = []) {
+  return Object.keys(record).reduce((acc, key) => {
+    acc[camelcase(key)] = record[key]
+
+    if (key === (`${tableName}_${relation[0]}`))
+      acc[relation[0]] = record[key]
+
+    return acc
+  }, {})
 }

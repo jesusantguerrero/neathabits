@@ -3,7 +3,7 @@
     <AtAuthForm
       :is-loading="isLoading"
       :mode="mode"
-      btn-class="mb-2 font-bold border-2 border-primary-400 rounded-md bg-gradient-to-br from-tail-400 to-primary"
+      btn-class="mb-2 font-bold border-2 rounded-md border-primary-400 bg-gradient-to-br from-tail-400 to-primary"
       @submit="onSubmit"
       @link-pressed="onLinkPressed"
     >
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
 import { AtAuthBox, AtAuthForm } from 'atmosphere-ui'
 import { useAuthState } from 'lumiere-utils/useAuth'
 import { useRouter } from 'vue-router'
@@ -32,20 +32,15 @@ const isLoading = ref(false)
 const { push } = useRouter()
 const onSubmit = async(formData: { email: string; password: string }) => {
   if (isLoading.value) return
-  try {
-    isLoading.value = true
-    await provider[props.mode](formData.email, formData.password)
-    nextTick(() => {
-      push({ name: config.home })
-    })
-  }
-  catch (error: ApiError) {
-    // eslint-disable-next-line no-alert
+  isLoading.value = true
+  provider[props.mode](formData.email, formData.password).then(() => {
+    location.reload()
+  }).catch((error: ApiError) => {
     alert(error.message)
-  }
-  finally {
-    isLoading.value = false
-  }
+  })
+    .finally(() => {
+      isLoading.value = false
+    })
 }
 
 const onLinkPressed = () => {

@@ -33,18 +33,19 @@ const state = {
       :links="state.links"
       :actions="state.actions"
     />
-    <div class="relative max-w-5xl mx-auto py-20 sm:pt-24 lg:pt-32">
-      <h1 class="text-slate-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center dark:text-white">
+    <div class="relative max-w-5xl py-20 mx-auto sm:pt-24 lg:pt-32">
+      <h1 class="text-4xl font-extrabold tracking-tight text-center text-slate-900 sm:text-5xl lg:text-6xl dark:text-white">
         The tool to track your daily routine and habits like a pro
       </h1>
-      <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-        Based on <span class="text-primary-400 font-bold">Atomic habits</span> and <span class="text-primary-400 font-bold">Shape Up</span>
+      <p class="max-w-3xl mx-auto mt-6 text-lg text-center text-slate-600 dark:text-slate-400">
+        Based on <span class="font-bold text-primary-400">Atomic habits</span> and <span class="font-bold text-primary-400">Shape Up</span>
       </p>
     </div>
   </div>
 </template>
 
 <route lang="yaml">
+name: landing
 meta:
   name: auth
   requiresAuth: false
