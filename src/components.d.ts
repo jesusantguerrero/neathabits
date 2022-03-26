@@ -16,6 +16,7 @@ declare module 'vue' {
     CarbonLogoGithub: typeof import('~icons/carbon/logo-github')['default']
     CarbonMoon: typeof import('~icons/carbon/moon')['default']
     CarbonSun: typeof import('~icons/carbon/sun')['default']
+    CarbonWarning: typeof import('~icons/carbon/warning')['default']
     Counter: typeof import('./components/Counter.vue')['default']
     CycleForm: typeof import('./components/organisms/CycleForm.vue')['default']
     DashboardTemplate: typeof import('./components/templates/DashboardTemplate.vue')['default']
@@ -24,7 +25,6 @@ declare module 'vue' {
     FormField: typeof import('./components/molecules/FormField.vue')['default']
     HabitItem: typeof import('./components/organisms/HabitItem.vue')['default']
     HabitsTemplate: typeof import('./components/templates/HabitsTemplate.vue')['default']
-    IconCarbonTrash: typeof import('~icons/ic/on-carbon-trash')['default']
     README: typeof import('./components/README.md')['default']
   }
 }
