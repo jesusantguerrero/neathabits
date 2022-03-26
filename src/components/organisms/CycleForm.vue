@@ -61,6 +61,7 @@ const submit = async() => {
     ...data,
     startDate: new Date(data.startDate),
     endDate: new Date(data.endDate),
+    id: data.id !== 'new' ? data.id : null,
   })).submit('submit')
   await cycle.reset()
 }

@@ -1,5 +1,4 @@
 import camelcase from 'camelcase'
-import { parseISO } from 'date-fns'
 import decamelize from 'decamelize'
 /** @ts-expect-error: provide */
 import { AuthState, useAuthState } from 'lumiere-utils/useAuth'
@@ -86,24 +85,6 @@ export function useCycleApi(relationshipTable?: string, relationshipFields?: str
   }
 }
 
-export interface ILabel {
-  id: number
-  name: string
-  colors?: string
-  color_type: string
-}
-
-export interface IScheduleEvent {
-  title: string
-  description: string
-  startTime: Date
-  endTime: Date
-  recurrence?: string
-  labels?: ILabel[]
-  user_id?: string
-  id?: string
-}
-
 function parseRecord(record: Record<string, any>, relationTable?: string) {
   const tableRecord: Record<string, any> = Object.keys(record).reduce((acc, key) => {
     acc[decamelize(key)] = record[key]
@@ -112,7 +93,7 @@ function parseRecord(record: Record<string, any>, relationTable?: string) {
 
   if (record.id)
     tableRecord.id = record.id
-  if (record.id === 'new')
+  if (!record.id || record.id === 'new')
     delete tableRecord.id
 
   if (relationTable)
