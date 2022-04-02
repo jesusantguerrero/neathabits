@@ -3,7 +3,15 @@ import { computed, reactive } from 'vue'
 import { AtButton } from 'atmosphere-ui'
 import { format } from 'date-fns'
 import { cloneDeep } from 'lodash'
+import { NDataTable } from 'naive-ui'
 import { useCycleApi } from '~/utils/useCycleApi'
+
+defineProps({
+  objectives: {
+    type: Boolean,
+    default: false,
+  },
+})
 
 const state = reactive({
   cycle: null,
@@ -11,6 +19,34 @@ const state = reactive({
   isAddingCycle: false,
   isCollapsed: false,
   collapseLabel: computed(() => state.isCollapsed ? 'Expand' : 'Collapse'),
+})
+
+const objectivesTable = reactive({
+  cols: [{
+    key: 'title',
+    title: 'Name',
+  }, {
+    key: 'cycle',
+    title: 'Cycle',
+  }, {
+    key: 'Task progress',
+    title: 'Task progress',
+  },
+  {
+    key: 'completed',
+    title: 'Completed',
+  },
+  {
+    key: 'related tasks',
+    title: 'Related tasks',
+  }, {
+    key: 'related resources',
+    title: 'Related resources',
+  }],
+  data: computed(() => state.cycles.map(cycle => cycle.objectives.map(obj => ({
+    ...obj,
+    cycle: cycle.name,
+  }))).flat()),
 })
 
 const formatDate = (date: Date) => format(new Date(date), 'MMM dd, yyyy')
@@ -133,6 +169,19 @@ const onEdit = (cycle) => {
         </tr>
       </table>
     </Transition>
+
+    <div v-if="objectives" class="mt-8">
+      <h4 class="text-xl font-bold flex justify-between px-2" :class="{'border-b pb-4': state.isCollapsed }">
+        Objectives
+      </h4>
+      <NDataTable
+        v-if="!state.isCollapsed"
+        class="mt-4"
+        :columns="objectivesTable.cols"
+        :data="objectivesTable.data"
+        bordered
+      />
+    </div>
   </div>
 </template>
 
