@@ -4,13 +4,12 @@ import decamelize from 'decamelize'
 import { AuthState, useAuthState } from 'lumiere-utils/useAuth'
 import { addRows, updateRow } from './useApiBase'
 
-export function useCycleApi(relationshipTable?: string, relationshipFields?: string[]) {
+export function useResourceApi(tableName: string, relationshipTable?: string, relationshipFields?: string[]) {
   const { provider, user } = useAuthState()
 
-  const tableName = 'cycles'
-  const updateRelationships = async(resource, savedResource) => {
+  const updateRelationships = async(resource: Record<string, any>, savedResource: Record<string, any>) => {
     if (relationshipTable && resource[relationshipTable]) {
-      const relation = resource[relationshipTable].map((record) => {
+      const relation = resource[relationshipTable].map((record: Record<string, any>) => {
         const fields: Record<string, any> = {}
         if (relationshipFields) {
           relationshipFields.forEach((field) => {
@@ -34,11 +33,11 @@ export function useCycleApi(relationshipTable?: string, relationshipFields?: str
 
     return savedResource
   }
-  const add = async(resource) => {
+  const add = async(resource: Record<string, any>) => {
     const savedResource = await addRows(tableName, [parseRecord(resource, relationshipTable)])
     return updateRelationships(resource, savedResource)
   }
-  const get = async(siteId) => {
+  const get = async(siteId: string) => {
     const supabase = provider.supabase
     const { data, error } = await supabase.from('sites').select('*')
       .eq('user_uid', user.id)
@@ -47,7 +46,7 @@ export function useCycleApi(relationshipTable?: string, relationshipFields?: str
     return data
   }
 
-  const update = async(resource) => {
+  const update = async(resource: Record<string, any>) => {
     const supabase = AuthState.provider.supabase
     await supabase.from(`${tableName}_${relationshipTable}`).delete().eq(`${tableName}_id`, resource.id)
     const savedResource = await updateRow(tableName, parseRecord(resource, relationshipTable), { returning: 'representation' })
@@ -64,7 +63,7 @@ export function useCycleApi(relationshipTable?: string, relationshipFields?: str
         `)
       .eq('user_id', user.id)
     if (error) throw error
-    const result = data?.map((evt: Record<string, any>) => recordToObject(evt, user, tableName, ['objectives']))
+    const result = data?.map((evt: Record<string, any>) => recordToObject(evt, tableName, ['objectives']))
     return result
   }
 
@@ -86,7 +85,7 @@ export function useCycleApi(relationshipTable?: string, relationshipFields?: str
 }
 
 function parseRecord(record: Record<string, any>, relationTable?: string) {
-  const tableRecord: Record<string, any> = Object.keys(record).reduce((acc, key) => {
+  const tableRecord: Record<string, any> = Object.keys(record).reduce((acc: Record<string, any>, key) => {
     acc[decamelize(key)] = record[key]
     return acc
   }, {})
@@ -102,8 +101,8 @@ function parseRecord(record: Record<string, any>, relationTable?: string) {
   return tableRecord
 }
 
-function recordToObject(record: Record<string, any>, user, tableName, relation: string[] = []) {
-  return Object.keys(record).reduce((acc, key) => {
+function recordToObject(record: Record<string, any>, tableName: string, relation: string[] = []) {
+  return Object.keys(record).reduce((acc: Record<string, any>, key) => {
     acc[camelcase(key)] = record[key]
 
     if (key === (`${tableName}_${relation[0]}`))

@@ -4,7 +4,7 @@ import { AtButton } from 'atmosphere-ui'
 import { format } from 'date-fns'
 import { cloneDeep } from 'lodash'
 import { NDataTable } from 'naive-ui'
-import { useCycleApi } from '~/utils/useCycleApi'
+import { useResourceApi } from '~/utils/useResourceApi'
 
 defineProps({
   objectives: {
@@ -52,7 +52,7 @@ const objectivesTable = reactive({
 const formatDate = (date: Date) => format(new Date(date), 'MMM dd, yyyy')
 
 // cycle
-const { add: addCycle, getAll: getAllCycles, update: updateCycle, remove: removeCycle } = useCycleApi('objectives', [
+const { add: addCycle, getAll: getAllCycles, update: updateCycle, remove: removeCycle } = useResourceApi('cycles', 'objectives', [
   'title',
   'description',
   'startDate',

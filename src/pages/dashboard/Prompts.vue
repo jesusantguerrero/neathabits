@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { useResourceApi } from '~/utils/useResourceApi'
 // cycle
-const { add, getAll, update, remove } = useCycleApi('objectives', [
+const { add, getAll, update, remove } = useResourceApi('objectives', [
   'title',
   'description',
   'startDate',
