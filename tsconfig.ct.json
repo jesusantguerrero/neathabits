@@ -1,0 +1,15 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.web.json",
+    "include": ["src/**/__test__/*.spec.ts"],
+    "compilerOptions": {
+      "isolatedModules": false,
+      "target": "es2015",
+      "lib": ["es2015", "dom"],
+      "types": ["vite/client", "cypress", "@testing-library/cypress"],
+      "composite": true,
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"]
+      }
+    }
+  }

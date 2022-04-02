@@ -1,4 +1,8 @@
 {
   "baseUrl": "http://localhost:3333",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "component": {
+    "componentFolder": "src",
+    "testFiles": "**/__test__/*.spec.ts"
+  }
 }

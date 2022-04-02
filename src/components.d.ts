@@ -17,6 +17,8 @@ declare module 'vue' {
     CarbonMoon: typeof import('~icons/carbon/moon')['default']
     CarbonSun: typeof import('~icons/carbon/sun')['default']
     Counter: typeof import('./components/Counter.vue')['default']
+    Create: typeof import('./components/templates/prompts/Create.vue')['default']
+    CreateTemplate: typeof import('./components/templates/prompts/CreateTemplate.vue')['default']
     CycleForm: typeof import('./components/organisms/CycleForm.vue')['default']
     CycleTemplate: typeof import('./components/templates/CycleTemplate.vue')['default']
     DashboardTemplate: typeof import('./components/templates/DashboardTemplate.vue')['default']

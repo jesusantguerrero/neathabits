@@ -4,7 +4,7 @@ module.exports = {
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
-    './node_modules/atmosphere-ui/**/*.vue',
+    './node_modules/atmosphere-ui/**/*.{vue,ts,js}',
   ],
   theme: {
     extend: {

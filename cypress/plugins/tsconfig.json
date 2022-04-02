@@ -1,0 +1,11 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.web.json",
+    "include": ["./integration/**/*", "./support/**/*"],
+    "module": "2015",
+    "compilerOptions": {
+      "isolatedModules": false,
+      "target": "es2015",
+      "lib": ["es5", "dom"],
+      "types": ["node", "cypress/types/cypress"]
+    }
+  }
