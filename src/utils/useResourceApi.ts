@@ -53,17 +53,20 @@ export function useResourceApi(tableName: string, relationshipTable?: string, re
     return updateRelationships(resource, savedResource)
   }
 
-  const getAll = async() => {
+  const getAll = async(params = { relationships: true }) => {
     const supabase = provider.supabase
+    const relationshipsParam = params.relationships
+      ? `, ${tableName}_${relationshipTable} (             
+      *
+    )`
+      : ''
     const { data, error } = await supabase.from(tableName)
-      .select(`*, 
-            ${tableName}_${relationshipTable} (             
-              *
-            )
+      .select(`*
+            ${relationshipsParam}
         `)
       .eq('user_id', user.id)
     if (error) throw error
-    const result = data?.map((evt: Record<string, any>) => recordToObject(evt, tableName, ['objectives']))
+    const result = data?.map((evt: Record<string, any>) => recordToObject(evt, tableName, relationshipTable ? [relationshipTable] : []))
     return result
   }
 
