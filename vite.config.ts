@@ -36,17 +36,17 @@ export default defineConfig({
     Layouts(),
 
     // https://github.com/antfu/unplugin-auto-import
-    AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        'vue-i18n',
-        '@vueuse/head',
-        '@vueuse/core',
-        'vitest',
-      ],
-      dts: 'src/auto-imports.d.ts',
-    }),
+    // AutoImport({
+    //   imports: [
+    //     'vue',
+    //     'vue-router',
+    //     'vue-i18n',
+    //     '@vueuse/head',
+    //     '@vueuse/core',
+    //     'vitest',
+    //   ],
+    //   dts: 'src/auto-imports.d.ts',
+    // }),
 
     // https://github.com/antfu/unplugin-vue-components
     Components({

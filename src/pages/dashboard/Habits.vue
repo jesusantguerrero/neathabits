@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { reactive } from 'vue'
 import HabitsTemplate from '~/components/templates/HabitsTemplate.vue'
 
 const state = reactive({

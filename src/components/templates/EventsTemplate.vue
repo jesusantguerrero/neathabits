@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, reactive } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 // @ts-expect-error: undefined types
 import { AtWeek } from 'atmosphere-ui'
 import EventForm from '~/components/organisms/EventForm.vue'
