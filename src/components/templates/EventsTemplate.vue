@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, reactive } from 'vue'
+// @ts-expect-error: undefined types
 import { AtWeek } from 'atmosphere-ui'
 import EventForm from '~/components/organisms/EventForm.vue'
 import type { IScheduleEvent } from '~/utils/useApi'
