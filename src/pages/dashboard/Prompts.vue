@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useResourceApi } from '~/utils/useResourceApi'
 import { NDataTable } from 'naive-ui'
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
+import { useResourceApi } from '~/utils/useResourceApi'
 
 const state = reactive({
   isLoading: false,
@@ -15,7 +15,7 @@ const { add, update, getAll } = useResourceApi('prompts', 'fields', [
 
 const fetchPrompts = () => {
   state.isLoading = true
-  getAll({ relationships: false }).then(( data) => {
+  getAll({ relationships: false }).then((data) => {
     state.prompts = data
     state.isLoading = false
   })
@@ -48,8 +48,6 @@ const savePrompt = (formData: Record<string, any>) => {
     fetchPrompts()
   })
 }
-
-
 
 const promptTable = reactive({
   cols: [{

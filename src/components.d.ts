@@ -10,12 +10,6 @@ declare module 'vue' {
     AppShell: typeof import('./components/templates/AppShell.vue')['default']
     AppSide: typeof import('./components/organisms/AppSide.vue')['default']
     AppSiteItem: typeof import('./components/molecules/AppSiteItem.vue')['default']
-    CarbonCampsite: typeof import('~icons/carbon/campsite')['default']
-    CarbonDicomOverlay: typeof import('~icons/carbon/dicom-overlay')['default']
-    CarbonLanguage: typeof import('~icons/carbon/language')['default']
-    CarbonLogoGithub: typeof import('~icons/carbon/logo-github')['default']
-    CarbonMoon: typeof import('~icons/carbon/moon')['default']
-    CarbonSun: typeof import('~icons/carbon/sun')['default']
     Counter: typeof import('./components/Counter.vue')['default']
     CreateTemplate: typeof import('./components/templates/prompts/CreateTemplate.vue')['default']
     CycleForm: typeof import('./components/organisms/CycleForm.vue')['default']
@@ -28,6 +22,10 @@ declare module 'vue' {
     HabitItem: typeof import('./components/organisms/HabitItem.vue')['default']
     HabitsTemplate: typeof import('./components/templates/HabitsTemplate.vue')['default']
     README: typeof import('./components/README.md')['default']
+    TagForm: typeof import('./components/organisms/TagForm.vue')['default']
+    TagsButton: typeof import('./components/organisms/TagsButton.vue')['default']
+    TagSelector: typeof import('./components/organisms/TagSelector.vue')['default']
+    TagsSelect: typeof import('./components/organisms/TagsSelect.vue')['default']
   }
 }
 
