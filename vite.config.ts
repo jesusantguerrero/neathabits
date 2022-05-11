@@ -134,7 +134,6 @@ export default defineConfig({
       enabled: false,
     }),
   ],
-
   server: {
     fs: {
       strict: true,
