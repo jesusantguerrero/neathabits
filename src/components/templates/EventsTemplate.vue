@@ -5,6 +5,8 @@ import { AtWeek } from 'atmosphere-ui'
 import EventForm from '~/components/organisms/EventForm.vue'
 import type { IScheduleEvent } from '~/utils/useApi'
 import { usePlanApi } from '~/utils/useApi'
+import { useResourceApi } from '~/utils/useResourceApi'
+import { exposeState } from '~/utils/exposeState'
 
 const state = reactive({
   week: [],
@@ -17,6 +19,7 @@ const state = reactive({
 
 // events setup
 const { add, getAll, update, remove } = usePlanApi()
+const { getAll: getLabels } = useResourceApi('labels')
 
 const fetchItems = async() => {
   getAll().then((data) => {
@@ -61,6 +64,8 @@ onMounted(() => {
     state.items = data
   })
 })
+
+exposeState(state)
 </script>
 
 <template>

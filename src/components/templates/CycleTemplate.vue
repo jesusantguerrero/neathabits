@@ -99,7 +99,7 @@ const onEdit = (cycle) => {
 
 <template>
   <div class="w-full">
-    <h4 class="text-xl font-bold flex justify-between px-2" :class="{'border-b pb-4': state.isCollapsed }">
+    <h4 class="text-xl font-bold flex justify-between px-2 text-gray-500" :class="{'border-b pb-4': state.isCollapsed }">
       Cycle Goals
       <button @click="state.isCollapsed=!state.isCollapsed">
         {{ state.collapseLabel }}

@@ -14,9 +14,9 @@ defineProps<{
         <h4 class="pb-4 font-bold text-center">
           Sections
         </h4>
-        <div>
-          <div v-for="label in labels" :key="label.id">
-            {{ label }}
+        <div class="px-5 space-y-2">
+          <div v-for="label in labels" :key="label.id" :class="label.colors" class="px-5 py-2 rounded-md">
+            {{ label.name }}
           </div>
         </div>
       </div>
