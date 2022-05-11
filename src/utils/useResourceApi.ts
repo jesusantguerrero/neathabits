@@ -42,7 +42,8 @@ export function useResourceApi(tableName: string, relationshipTable?: string, re
     const { data, error } = await supabase.from('sites').select('*')
       .eq('user_uid', user.id)
       .eq('id', siteId)
-    if (error) throw error
+    if (error)
+      throw error
     return data
   }
 
@@ -55,7 +56,7 @@ export function useResourceApi(tableName: string, relationshipTable?: string, re
 
   const getAll = async(params = { relationships: true }) => {
     const supabase = provider.supabase
-    const relationshipsParam = params.relationships
+    const relationshipsParam = params.relationships && relationshipTable
       ? `, ${tableName}_${relationshipTable} (             
       *
     )`
@@ -65,7 +66,8 @@ export function useResourceApi(tableName: string, relationshipTable?: string, re
             ${relationshipsParam}
         `)
       .eq('user_id', user.id)
-    if (error) throw error
+    if (error)
+      throw error
     const result = data?.map((evt: Record<string, any>) => recordToObject(evt, tableName, relationshipTable ? [relationshipTable] : []))
     return result
   }
