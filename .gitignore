@@ -2,9 +2,13 @@
 .vite-ssg-dist
 .vite-ssg-temp
 *.local
+.env
 storybook-static
 dist
 dist-ssr
 node_modules
 .idea/
 *.log
+
+# Local Netlify folder
+.netlify
