@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { computed, onMounted, reactive } from 'vue'
-import { AtButton } from 'atmosphere-ui'
-import { format } from 'date-fns'
-import { cloneDeep } from 'lodash'
+// @ts-expect-error: no defined types for atmosphere-ui
 import { NDataTable } from 'naive-ui'
-import { useResourceApi } from '~/utils/useResourceApi'
+import { AtButton } from 'atmosphere-ui'
+import { cloneDeep } from 'lodash'
+
+import { formatDate } from '~/utils'
+import { cycleTableCols } from '~/domains/cycles/cycleTableCols'
+import { useCycleStore } from '~/stores/cycles'
 
 defineProps({
   objectives: {
@@ -15,73 +18,35 @@ defineProps({
 
 const state = reactive({
   cycle: null,
-  cycles: [],
   isAddingCycle: false,
   isCollapsed: false,
   collapseLabel: computed(() => state.isCollapsed ? 'Expand' : 'Collapse'),
 })
 
 const objectivesTable = reactive({
-  cols: [{
-    key: 'title',
-    title: 'Name',
-  }, {
-    key: 'cycle',
-    title: 'Cycle',
-  }, {
-    key: 'Task progress',
-    title: 'Task progress',
-  },
-  {
-    key: 'completed',
-    title: 'Completed',
-  },
-  {
-    key: 'related tasks',
-    title: 'Related tasks',
-  }, {
-    key: 'related resources',
-    title: 'Related resources',
-  }],
-  data: computed(() => state.cycles.map(cycle => cycle.objectives.map(obj => ({
+  data: computed(() => cycles.data.map(cycle => cycle.objectives.map(obj => ({
     ...obj,
     cycle: cycle.name,
   }))).flat()),
 })
 
-const formatDate = (date: Date) => format(new Date(date), 'MMM dd, yyyy')
+const cycles = useCycleStore()
 
-// cycle
-const { add: addCycle, getAll: getAllCycles, update: updateCycle, remove: removeCycle } = useResourceApi('cycles', 'objectives', [
-  'title',
-  'description',
-  'startDate',
-  'endDate',
-])
-
-onMounted(() => {
-  getAllCycles().then((data) => {
-    state.cycles = data
-  })
+onMounted(async() => {
+  await cycles.fetch()
 })
 
-const fetchCycles = () => {
-  getAllCycles().then((data) => {
-    state.cycles = data
-  })
-}
-
 const onCycleSaved = async(cycle) => {
-  const method = cycle.id ? updateCycle : addCycle
+  const method = cycle.id ? cycles.update : cycles.add
   method(cycle).then(() => {
-    fetchCycles()
+    cycles.fetch()
     state.isAddingCycle = false
   })
 }
 
-const onRemoveCycle = async(cycleId) => {
-  removeCycle(cycleId).then(() => {
-    fetchCycles()
+const onRemoveCycle = async(cycleId: string) => {
+  cycles.remove(cycleId).then(() => {
+    cycles.fetch()
   })
 }
 
@@ -94,7 +59,6 @@ const onEdit = (cycle) => {
   state.cycle = cloneDeep(dataToEdit)
   state.isAddingCycle = true
 }
-
 </script>
 
 <template>
@@ -124,7 +88,7 @@ const onEdit = (cycle) => {
             Actions
           </th>
         </tr>
-        <tr v-for="cycle in state.cycles" :key="cycle.name">
+        <tr v-for="cycle in cycles.data" :key="cycle.name">
           <td class="px-5 border border-slate-200">
             {{ cycle.name }}
           </td>
@@ -177,7 +141,7 @@ const onEdit = (cycle) => {
       <NDataTable
         v-if="!state.isCollapsed"
         class="mt-4"
-        :columns="objectivesTable.cols"
+        :columns="cycleTableCols"
         :data="objectivesTable.data"
         bordered
       />

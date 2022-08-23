@@ -5,7 +5,7 @@ import { AuthState, useAuthState } from 'lumiere-utils/useAuth'
 import { addRows, updateRow } from './useApiBase'
 
 export function useResourceApi(tableName: string, relationshipTable?: string, relationshipFields?: string[]) {
-  const { provider, user } = useAuthState()
+  const supabase = AuthState.provider.supabase
 
   const updateRelationships = async(resource: Record<string, any>, savedResource: Record<string, any>) => {
     if (relationshipTable && resource[relationshipTable]) {
@@ -38,9 +38,8 @@ export function useResourceApi(tableName: string, relationshipTable?: string, re
     return updateRelationships(resource, savedResource)
   }
   const get = async(siteId: string) => {
-    const supabase = provider.supabase
     const { data, error } = await supabase.from('sites').select('*')
-      .eq('user_uid', user.id)
+      .eq('user_uid', AuthState.user.id)
       .eq('id', siteId)
     if (error)
       throw error
@@ -48,14 +47,12 @@ export function useResourceApi(tableName: string, relationshipTable?: string, re
   }
 
   const update = async(resource: Record<string, any>) => {
-    const supabase = AuthState.provider.supabase
     await supabase.from(`${tableName}_${relationshipTable}`).delete().eq(`${tableName}_id`, resource.id)
     const savedResource = await updateRow(tableName, parseRecord(resource, relationshipTable), { returning: 'representation' })
     return updateRelationships(resource, savedResource)
   }
 
   const getAll = async(params = { relationships: true }) => {
-    const supabase = provider.supabase
     const relationshipsParam = params.relationships && relationshipTable
       ? `, ${tableName}_${relationshipTable} (             
       *
@@ -65,7 +62,7 @@ export function useResourceApi(tableName: string, relationshipTable?: string, re
       .select(`*
             ${relationshipsParam}
         `)
-      .eq('user_id', user.id)
+      .eq('user_id', AuthState.user.id)
     if (error)
       throw error
     const result = data?.map((evt: Record<string, any>) => recordToObject(evt, tableName, relationshipTable ? [relationshipTable] : []))
@@ -73,7 +70,6 @@ export function useResourceApi(tableName: string, relationshipTable?: string, re
   }
 
   const remove = async(resourceId: string) => {
-    const supabase = provider.supabase
     if (relationshipTable)
       await supabase.from(`${tableName}_${relationshipTable}`).delete().eq(`${tableName}_id`, resourceId)
 
