@@ -19,17 +19,9 @@ const menu = [
         label: 'Habits',
         to: '/dashboard/habits',
       }, {
-        icon: IconPrompts,
-        label: 'Prompts',
-        to: '/dashboard/prompts',
-      }, {
         icon: IconCycle,
         label: 'Cycles',
         to: '/dashboard/cycles',
-      }, {
-        icon: IconCycle,
-        label: 'Rewards',
-        to: '/dashboard/rewards',
       },
     ],
   }, {
@@ -39,10 +31,6 @@ const menu = [
         icon: IconCycle,
         label: 'Resources',
         to: '/dashboard/resources',
-      }, {
-        icon: IconCycle,
-        label: 'My Resources',
-        to: '/dashboard/my-resources',
       },
     ],
   },

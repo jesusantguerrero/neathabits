@@ -22,6 +22,7 @@ declare module 'vue' {
     HabitItem: typeof import('./components/organisms/HabitItem.vue')['default']
     HabitsTemplate: typeof import('./components/templates/HabitsTemplate.vue')['default']
     README: typeof import('./components/README.md')['default']
+    ResourceItem: typeof import('./components/organisms/ResourceItem.vue')['default']
     TagForm: typeof import('./components/organisms/TagForm.vue')['default']
     TagsButton: typeof import('./components/organisms/TagsButton.vue')['default']
     TagSelector: typeof import('./components/organisms/TagSelector.vue')['default']

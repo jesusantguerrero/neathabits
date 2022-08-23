@@ -16,7 +16,7 @@ const emit = defineEmits(['update:modelValue', 'saved'])
       type="text"
       :value="modelValue"
       placeholder="Type a name"
-      @input="$emit('update:modelValue')"
+      @input="$emit('update:modelValue', $event.target.value)"
       @keydown.ctrl.enter="$emit('saved')"
     >
   </div>
